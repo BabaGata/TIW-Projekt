@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Preporuke{% endblock %}
+{% block content %}
+<h1>Preporučeni događaji</h1>
+{% if events %}
+  <ul>
+    {% for e in events %}
+    <li>
+      <b>{{ e.name }}</b> ({{ e.location }}, {{ e.genre }}) – 
+      👍 {{ e.likes }} / 👎 {{ e.dislikes }}
+    </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Nema preporuka.</p>
+{% endif %}
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary">Natrag</a>
+{% endblock %}

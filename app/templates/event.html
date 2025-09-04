@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ event.name }}{% endblock %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <h2>{{ event.name }}</h2>
+  <p><em>{{ event.date }}</em></p>
+  <p>{{ event.description }}</p>
+  <p><strong>Lokacija:</strong> {{ event.location }}</p>
+  <p><strong>Organizator:</strong> {{ event.organizer }}</p>
+  <p><strong>Žanr:</strong> {{ event.genre }}</p>
+
+  <form action="{{ url_for('main.like_event', event_id=event.id) }}" method="post" style="display:inline;">
+    <button type="submit" class="btn btn-success">👍 Like ({{ event.likes }})</button>
+  </form>
+
+  <form action="{{ url_for('main.dislike_event', event_id=event.id) }}" method="post" style="display:inline;">
+    <button type="submit" class="btn btn-danger">👎 Dislike ({{ event.dislikes }})</button>
+  </form>
+</div>
+{% endblock %}

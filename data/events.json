@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "name": "Summer Music Festival",
+    "description": "Biggest open-air festival in the city.",
+    "location": "Zagreb",
+    "organizer": "EventCo",
+    "genre": "Electronic",
+    "likes": 27,
+    "dislikes": 29,
+    "date": "2026-07-15"
+  },
+  {
+    "id": 2,
+    "name": "Jazz Night",
+    "description": "Smooth jazz with top musicians.",
+    "location": "Split",
+    "organizer": "JazzClub",
+    "genre": "Jazz",
+    "likes": 7,
+    "dislikes": 5,
+    "date": "2026-08-05"
+  },
+  {
+    "id": 3,
+    "name": "Dubrovnik Summer Festival",
+    "description": "Traditional cultural festival with theater, music and dance performances.",
+    "location": "Dubrovnik",
+    "organizer": "Dubrovnik Cultural Society",
+    "genre": "Cultural",
+    "likes": 46,
+    "dislikes": 3,
+    "date": "2026-07-10"
+  },
+  {
+    "id": 4,
+    "name": "Rijeka Carnival",
+    "description": "One of Europe's biggest carnival celebrations with parades and masks.",
+    "location": "Rijeka",
+    "organizer": "Rijeka Tourist Board",
+    "genre": "Cultural",
+    "likes": 41,
+    "dislikes": 7,
+    "date": "2026-02-18"
+  },
+  {
+    "id": 5,
+    "name": "Ultra Europe",
+    "description": "World-famous electronic music festival with top DJs.",
+    "location": "Split",
+    "organizer": "Ultra Worldwide",
+    "genre": "Electronic",
+    "likes": 68,
+    "dislikes": 12,
+    "date": "2026-07-07"
+  },
+  {
+    "id": 6,
+    "name": "Osijek Summer Nights",
+    "description": "Open-air concerts and performances throughout the summer.",
+    "location": "Osijek",
+    "organizer": "Osijek City Council",
+    "genre": "Music",
+    "likes": 24,
+    "dislikes": 4,
+    "date": "2026-06-20"
+  },
+  {
+    "id": 7,
+    "name": "Zadar Music Evenings",
+    "description": "Classical music festival in historical venues.",
+    "location": "Zadar",
+    "organizer": "Zadar Philharmonic",
+    "genre": "Classical",
+    "likes": 20,
+    "dislikes": 2,
+    "date": "2026-08-12"
+  },
+  {
+    "id": 8,
+    "name": "Pula Film Festival",
+    "description": "Croatia's oldest film festival held in the Roman amphitheater.",
+    "location": "Pula",
+    "organizer": "Pula Film Festival",
+    "genre": "Film",
+    "likes": 31,
+    "dislikes": 6,
+    "date": "2026-07-15"
+  },
+  {
+    "id": 9,
+    "name": "Šibenik International Children's Festival",
+    "description": "Festival dedicated to children's creativity and performances.",
+    "location": "Šibenik",
+    "organizer": "Šibenik Cultural Center",
+    "genre": "Family",
+    "likes": 28,
+    "dislikes": 1,
+    "date": "2026-06-18"
+  },
+  {
+    "id": 10,
+    "name": "Varaždin Baroque Evenings",
+    "description": "Festival of baroque music in historical palaces.",
+    "location": "Varaždin",
+    "organizer": "Varaždin Concert Office",
+    "genre": "Classical",
+    "likes": 21,
+    "dislikes": 3,
+    "date": "2025-09-22"
+  },
+  {
+    "id": 11,
+    "name": "Karlovac Beer Festival",
+    "description": "Celebration of Croatian brewing tradition with live music.",
+    "location": "Karlovac",
+    "organizer": "Karlovac Brewery",
+    "genre": "Food & Drink",
+    "likes": 43,
+    "dislikes": 8,
+    "date": "2026-08-25"
+  },
+  {
+    "id": 12,
+    "name": "Zagreb Dance Week",
+    "description": "International contemporary dance festival.",
+    "location": "Zagreb",
+    "organizer": "Zagreb Dance Center",
+    "genre": "Dance",
+    "likes": 17,
+    "dislikes": 4,
+    "date": "2026-05-28"
+  },
+  {
+    "id": 13,
+    "name": "Split Film Festival",
+    "description": "International festival of new film and video.",
+    "location": "Split",
+    "organizer": "Split Film Association",
+    "genre": "Film",
+    "likes": 31,
+    "dislikes": 12,
+    "date": "2025-09-15"
+  },
+  {
+    "id": 14,
+    "name": "Rijeka Summer Nights",
+    "description": "Open-air theater and music performances.",
+    "location": "Rijeka",
+    "organizer": "Rijeka Summer Festival",
+    "genre": "Theater",
+    "likes": 15,
+    "dislikes": 2,
+    "date": "2026-07-22"
+  },
+  {
+    "id": 15,
+    "name": "Dubrovnik Wine Festival",
+    "description": "Showcase of Dalmatian wines with food pairing.",
+    "location": "Dubrovnik",
+    "organizer": "Dubrovnik Wine Association",
+    "genre": "Food & Drink",
+    "likes": 34,
+    "dislikes": 6,
+    "date": "2025-10-05"
+  },
+  {
+    "id": 16,
+    "name": "Zadar Outdoor Festival",
+    "description": "Adventure sports and outdoor activities festival.",
+    "location": "Zadar",
+    "organizer": "Zadar Adventure",
+    "genre": "Sports",
+    "likes": 26,
+    "dislikes": 3,
+    "date": "2026-06-10"
+  },
+  {
+    "id": 17,
+    "name": "Osijek Food Festival",
+    "description": "Traditional Slavonian cuisine and modern gastronomy.",
+    "location": "Osijek",
+    "organizer": "Osijek Culinary Society",
+    "genre": "Food & Drink",
+    "likes": 46,
+    "dislikes": 12,
+    "date": "2025-09-08"
+  },
+  {
+    "id": 18,
+    "name": "Pula Historic Festival",
+    "description": "Reenactment of Roman times in the amphitheater.",
+    "location": "Pula",
+    "organizer": "Pula Historical Society",
+    "genre": "Cultural",
+    "likes": 29,
+    "dislikes": 4,
+    "date": "2026-08-19"
+  },
+  {
+    "id": 19,
+    "name": "Šibenik Medieval Festival",
+    "description": "Recreation of medieval times with knights and crafts.",
+    "location": "Šibenik",
+    "organizer": "Šibenik History Club",
+    "genre": "Cultural",
+    "likes": 31,
+    "dislikes": 2,
+    "date": "2026-07-29"
+  },
+  {
+    "id": 20,
+    "name": "Varaždin Guitar Festival",
+    "description": "International guitar competition and concerts.",
+    "location": "Varaždin",
+    "organizer": "Varaždin Music School",
+    "genre": "Music",
+    "likes": 18,
+    "dislikes": 4,
+    "date": "2025-10-12"
+  }
+]

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Karta događaja{% endblock %}
+{% block content %}
+<h2>Karta događaja</h2>
+<div id="map-container">
+  <div id="map">
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+    </div>
+    <!-- SVG map of Croatia will be inserted here -->
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+<script>
+// Event data passed from Flask
+const eventsData = JSON.parse('{{ events|tojson | safe }}');
+
+// Croatian city coordinates (longitude, latitude)
+const cityCoords = {
+  "Zagreb": [15.9819, 45.8150],
+  "Split": [16.4402, 43.5081],
+  "Rijeka": [14.4422, 45.3271],
+  "Osijek": [18.6955, 45.5550],
+  "Zadar": [15.2420, 44.1194],
+  "Pula": [13.8496, 44.8666],
+  "Dubrovnik": [18.0944, 42.6507],
+  "Šibenik": [15.8950, 43.7339],
+  "Varaždin": [16.3366, 46.3057],
+  "Karlovac": [15.5553, 45.4929]
+};
+
+// Count events by location
+const eventsByLocation = {};
+eventsData.forEach(event => {
+  if (cityCoords[event.location]) {
+    if (!eventsByLocation[event.location]) {
+      eventsByLocation[event.location] = 0;
+    }
+    eventsByLocation[event.location]++;
+  }
+});
+
+// Convert to array for easier processing
+const eventCounts = Object.entries(eventsByLocation).map(([location, count]) => {
+  return {
+    location,
+    count,
+    coordinates: cityCoords[location]
+  };
+});
+
+// Load and display the map
+d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+  .then(function(world) {
+    // Extract Croatia from the world data
+    const croatia = world.features.find(d => d.properties.name === "Croatia");
+    
+    if (!croatia) {
+      throw new Error("Croatia not found in the map data");
+    }
+    
+    // Set up dimensions
+    const width = 800;
+    const height = 500;
+    
+    // Create SVG container
+    const svg = d3.select("#map")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [0, 0, width, height])
+      .attr("style", "width: 100%; height: auto;");
+    
+    // Create projection - fit to Croatia's bounding box
+    const projection = d3.geoMercator()
+      .fitSize([width, height], croatia);
+    
+    // Create path generator
+    const path = d3.geoPath().projection(projection);
+    
+    // Draw country background
+    svg.append("path")
+      .datum(croatia)
+      .attr("d", path)
+      .attr("fill", "#e0e0e0")
+      .attr("stroke", "#999")
+      .attr("stroke-width", 0.5);
+    
+    // Create radius scale based on event counts
+    const maxCount = d3.max(eventCounts, d => d.count);
+    const radiusScale = d3.scaleSqrt()
+      .domain([0, maxCount])
+      .range([0, 30]);
+    
+    // Add circles for events
+    svg.append("g")
+      .selectAll("circle")
+      .data(eventCounts)
+      .enter().append("circle")
+      .attr("cx", d => projection(d.coordinates)[0])
+      .attr("cy", d => projection(d.coordinates)[1])
+      .attr("r", d => radiusScale(d.count))
+      .attr("fill", "steelblue")
+      .attr("fill-opacity", 0.6)
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5);
+    
+        // Add location labels (special handling for Varaždin)
+    const labels = svg.append("g")
+      .selectAll("text")
+      .data(eventCounts)
+      .enter();
+
+    // Varaždin with side offset + connector line
+    labels.append("text")
+      .attr("x", d => {
+        const [x, y] = projection(d.coordinates);
+        return d.location === "Varaždin" ? x + radiusScale(d.count) + 5 : x;
+      })
+      .attr("y", d => {
+        const [x, y] = projection(d.coordinates);
+        return d.location === "Varaždin" ? y + 4 : y - radiusScale(d.count) - 5;
+      })
+      .attr("text-anchor", d => d.location === "Varaždin" ? "start" : "middle")
+      .attr("font-size", "10px")
+      .attr("font-weight", "bold")
+      .attr("fill", "#333")
+      .text(d => d.location);
+    
+    // Add event count labels inside bubbles
+    svg.append("g")
+      .selectAll("text.count")
+      .data(eventCounts)
+      .enter().append("text")
+      .attr("class", "count")
+      .attr("x", d => projection(d.coordinates)[0])
+      .attr("y", d => projection(d.coordinates)[1] + 4)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
+      .attr("font-weight", "bold")
+      .attr("fill", "white")
+      .text(d => d.count);
+  })
+  .catch(function(error) {
+    console.error("Error loading map data:", error);
+    d3.select("#map").html(`
+      <div class="alert alert-warning">
+        <p>Error loading map data: ${error.message}</p>
+        <p>Using simplified fallback visualization.</p>
+      </div>
+    `);
+    // ... fallback stays same ...
+  });
+</script>
+{% endblock %}

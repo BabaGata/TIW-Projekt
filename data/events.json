@@ -6,7 +6,7 @@
     "location": "Zagreb",
     "organizer": "EventCo",
     "genre": "Electronic",
-    "likes": 27,
+    "likes": 28,
     "dislikes": 29,
     "date": "2026-07-15"
   },
@@ -127,7 +127,7 @@
     "location": "Zagreb",
     "organizer": "Zagreb Dance Center",
     "genre": "Dance",
-    "likes": 17,
+    "likes": 18,
     "dislikes": 4,
     "date": "2026-05-28"
   },
@@ -138,7 +138,7 @@
     "location": "Split",
     "organizer": "Split Film Association",
     "genre": "Film",
-    "likes": 31,
+    "likes": 35,
     "dislikes": 12,
     "date": "2025-09-15"
   },
@@ -171,7 +171,7 @@
     "location": "Zadar",
     "organizer": "Zadar Adventure",
     "genre": "Sports",
-    "likes": 26,
+    "likes": 27,
     "dislikes": 3,
     "date": "2026-06-10"
   },
@@ -182,7 +182,7 @@
     "location": "Osijek",
     "organizer": "Osijek Culinary Society",
     "genre": "Food & Drink",
-    "likes": 46,
+    "likes": 183,
     "dislikes": 12,
     "date": "2025-09-08"
   },
@@ -215,7 +215,7 @@
     "location": "Varaždin",
     "organizer": "Varaždin Music School",
     "genre": "Music",
-    "likes": 18,
+    "likes": 19,
     "dislikes": 4,
     "date": "2025-10-12"
   }

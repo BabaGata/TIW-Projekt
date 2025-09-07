@@ -3,3 +3,4 @@ __pycache__/
 venv\
 __pycache__\
 service_account.json
+client_secret.json

@@ -1,18 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Preporuke{% endblock %}
+{% block title %}Preporučeni događaji{% endblock %}
 {% block content %}
-<h1>Preporučeni događaji</h1>
+<h2>Preporučeni događaji</h2>
+
 {% if events %}
-  <ul>
-    {% for e in events %}
-    <li>
-      <b>{{ e.name }}</b> ({{ e.location }}, {{ e.genre }}) – 
-      👍 {{ e.likes }} / 👎 {{ e.dislikes }}
-    </li>
+  <ul class="list-unstyled">
+    {% for event in events %}
+      <li class="mb-4 p-3 border rounded bg-light shadow-sm">
+        <a href="{{ url_for('main.event_detail', event_id=event.id) }}" class="text-decoration-none text-dark">
+          <h3>{{ event.name }}</h3>
+          <p><em>{{ event.date }}</em></p>
+          <p>{{ event.description }}</p>
+          <p><strong>Lokacija:</strong> {{ event.location }}</p>
+          <p><strong>Organizator:</strong> {{ event.organizer }}</p>
+          <p><strong>Žanr:</strong> {{ event.genre }}</p>
+        </a>
+        <p class="mt-2">
+          👍 {{ event.likes }} | 👎 {{ event.dislikes }}
+        </p>
+      </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p>Nema preporuka.</p>
+  <p>Nema preporučenih događaja u ovom trenutku.</p>
 {% endif %}
-<a href="{{ url_for('main.index') }}" class="btn btn-secondary">Natrag</a>
+
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary mt-3">Natrag</a>
 {% endblock %}

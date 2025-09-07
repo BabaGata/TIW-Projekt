@@ -4,65 +4,261 @@
 {% block content %}
 <h2>Google Analytics podaci</h2>
 
-<h4 class="mt-4">Tablica podataka</h4>
+<h4 class="mt-4">Top stranice (po vremenu na stranici)</h4>
 <div class="table-responsive">
   <style>
-    .table-responsive table th,git add README.md
-    .table-responsive table td {
-      text-align: left;   /* or "center" if you prefer */
-      padding: 6px 12px;  /* optional: better spacing */
+    
+    .table-responsive table thead th,
+    .table-responsive table tbody td {
+      text-align: left !important;
+      vertical-align: middle;
     }
   </style>
   {{ df|safe }}
 </div>
 
-<h4 class="mt-4">Top stranice (PageViews)</h4>
-<canvas id="pagesChart" height="120"></canvas>
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h4>Ukupni broj pregleda kroz sve sesije</h4>
+    <div class="chart-container">
+    <canvas id="totalPagesChart" height="300"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h4>Prosječni broj pregleda kroz sve sesije</h4>
+    <div class="chart-container">
+    <canvas id="avgPagesChart" height="300"></canvas>
+    </div>
+  </div>
+</div>
 
-<h4 class="mt-4">Korisnici po uređaju</h4>
-<canvas id="deviceChart" height="120"></canvas>
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h4>Prosječno trajanje sesija</h4>
+    <div class="chart-container">
+    <canvas id="avgTimeChart" height="300"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h4>Usporedba ukupnog i prosječnog broja pregleda</h4>
+    <div class="chart-container">
+    <canvas id="mergedPagesChart" height="300"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h4>Broj aktivnih korisnika po državama</h4>
+    <div class="chart-container">
+    <canvas id="countryChart1" height="300"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h4>Ukupni broj pregleda po državama</h4>
+    <div class="chart-container">
+    <canvas id="countryChart2" height="300"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-12">
+    <h4>Prijelazi sa stranice na stranicu</h4>
+    <div class="chart-container">
+    <canvas id="userFlowChart" height="500"></canvas>
+    </div>
+  </div>
+</div>
 
 <a href="{{ url_for('main.index') }}" class="btn btn-secondary mt-3">Natrag</a>
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js"></script>
 <script>
-// Flask passes df.to_html, but for charts we need raw data
-const analyticsData = JSON.parse('{{ df_json|tojson | safe }}');
 
-// Top pages chart
-const pageLabels = analyticsData.map(r => r.PagePath);
-const pageViews = analyticsData.map(r => parseInt(r.PageViews));
+const totalPages       = JSON.parse('{{ total_page_activity | tojson | safe }}');
+const avgPages         = JSON.parse('{{ avg_page_activity | tojson | safe }}');
+const avgTime          = JSON.parse('{{ avg_time_activity | tojson | safe }}');
+const countryUsers     = JSON.parse('{{ country_summary | tojson | safe }}');
+const countryPageviews = JSON.parse('{{ country_pageviews | tojson | safe }}');
+const userFlow         = JSON.parse('{{ user_flow | tojson | safe }}');
 
-new Chart(document.getElementById("pagesChart"), {
+const avgPagesMap = {};
+avgPages.forEach(r => { avgPagesMap[r.PagePath] = r.PageViews; });
+
+const labels = totalPages.map(r => r.PagePath);
+const totalValues = totalPages.map(r => r.PageViews);
+const avgValues = labels.map(path => avgPagesMap[path] || 0);
+
+function generateColors(n) {
+  const colors = [];
+  for (let i = 0; i < n; i++) {
+    const hue = (i * 137.508) % 360;
+    colors.push(`hsl(${hue}, 65%, 55%)`);
+  }
+  return colors;
+}
+
+
+new Chart(document.getElementById("totalPagesChart"), {
   type: "bar",
   data: {
-    labels: pageLabels,
+    labels: totalPages.map(r => r.PagePath),
     datasets: [{
-      label: "Page Views",
-      data: pageViews,
+      label: "Ukupni PageViews",
+      data: totalPages.map(r => r.PageViews),
       backgroundColor: "steelblue"
     }]
   },
-  options: { responsive: true, plugins: { legend: { display: false } } }
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Broj pregleda"
+        }
+      }
+    }
+  }
 });
 
-// Device category chart
-const deviceCounts = {};
-analyticsData.forEach(r => {
-  const device = r.DeviceCategory || "Unknown";
-  deviceCounts[device] = (deviceCounts[device] || 0) + parseInt(r.ActiveUsers);
+
+new Chart(document.getElementById("avgPagesChart"), {
+  type: "bar",
+  data: {
+    labels: avgPages.map(r => r.PagePath),
+    datasets: [{
+      label: "Prosječni PageViews",
+      data: avgPages.map(r => r.PageViews),
+      backgroundColor: "darkorange"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Broj pregleda"
+        }
+      }
+    }
+  }
 });
 
-new Chart(document.getElementById("deviceChart"), {
+
+new Chart(document.getElementById("avgTimeChart"), {
+  type: "bar",
+  data: {
+    labels: avgTime.map(r => r.PagePath),
+    datasets: [{
+      label: "Prosječno vrijeme (sekunde)",
+      data: avgTime.map(r => r.AvgSessionDuration),
+      backgroundColor: "seagreen"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Vrijeme (s)"
+        }
+      }
+    }
+  }
+});
+
+
+new Chart(document.getElementById("mergedPagesChart"), {
+  type: "bar",
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: "Ukupni PageViews",
+        data: totalValues,
+        backgroundColor: "steelblue"
+      },
+      {
+        label: "Prosječni PageViews",
+        data: avgValues,
+        backgroundColor: "darkorange"
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Broj pregleda"
+        }
+      }
+    }
+  }
+});
+
+
+const colorCount = Math.max(countryUsers.length, countryPageviews.length);
+const countryColors = generateColors(colorCount);
+
+
+new Chart(document.getElementById("countryChart1"), {
   type: "pie",
   data: {
-    labels: Object.keys(deviceCounts),
+    labels: countryUsers.map(r => r.Country),
     datasets: [{
-      data: Object.values(deviceCounts),
-      backgroundColor: ["#4e79a7","#f28e2c","#e15759"]
+      data: countryUsers.map(r => r.ActiveUsers),
+      backgroundColor: countryColors.slice(0, countryUsers.length)
     }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+});
+
+
+new Chart(document.getElementById("countryChart2"), {
+  type: "pie",
+  data: {
+    labels: countryPageviews.map(r => r.Country),
+    datasets: [{
+      data: countryPageviews.map(r => r.PageViews),
+      backgroundColor: countryColors.slice(0, countryPageviews.length)
+    }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+});
+
+
+new Chart(document.getElementById("userFlowChart"), {
+  type: 'sankey',
+  data: {
+    datasets: [{
+      label: "User Flow",
+      data: userFlow.map(d => ({ from: d.from, to: d.to, flow: d.value })),
+      colorFrom: "blue",
+      colorTo: "orange",
+      colorMode: "gradient"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } }
   }
 });
 </script>
